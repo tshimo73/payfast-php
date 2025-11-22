@@ -1,6 +1,6 @@
 <?php
 
-namespace TshimologoMoeng\Payfast;
+namespace TshimologoMoeng\Payfast\SimpleIntegration;
 
 
 use TshimologoMoeng\Payfast\Payfast;
