@@ -2,7 +2,6 @@
 
 namespace TshimologoMoeng\Payfast;
 
-require 'vendor/autoload.php';
 
 use TshimologoMoeng\Payfast\Payfast;
 use TshimologoMoeng\Payfast\Enums\PaymentMethod;
