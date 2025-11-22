@@ -2,8 +2,6 @@
 
 namespace TshimologoMoeng\Payfast\Enums;
 
-require './vendor/autoload.php';
-
 enum PaymentMethod: string
 {
     case EFT = 'ef';

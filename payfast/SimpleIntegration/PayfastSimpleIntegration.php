@@ -165,11 +165,3 @@ class PayfastSimpleIntegration extends Payfast
     }
 }
 
-$pf = new PayfastSimpleIntegration("10043910", "v4pv8n884g7ie", true);
-$pf->set_customer_details('james', 'bohelavard', "tshimoanything08@gmail.com");
-$pf->set_transaction_details(10, 'Order 1', payment_method:PaymentMethod::Apple_Pay);
-$data = $pf->transaction_setup();
-foreach( $data as $key => $value){
-    echo $key . " => " . $value. "\n";
-}
-

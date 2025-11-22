@@ -2,9 +2,6 @@
 
 namespace TshimologoMoeng\Payfast;
 
-require 'vendor/autoload.php';
-
-
 abstract class Payfast
 {
     protected string $merchant_id;
