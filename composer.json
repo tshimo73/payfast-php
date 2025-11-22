@@ -1,0 +1,19 @@
+{
+    "name": "tshimologomoeng/payfast-php",
+    "description": "Modern PHP package for PayFast payment integration",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "TshimologoMoeng\\Payfast\\": "payfast/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Tshimologo Moeng",
+            "email": "tshimologomoeng08@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {}
+}
