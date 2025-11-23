@@ -29,7 +29,7 @@ use TshimologoMoeng\Payfast\Payfast;
  * ```
  * 
  * @package TshimologoMoeng\Payfast
- * @see https://developers.payfast.co.za/docs#step_4_confirm_payment
+ * @link https://developers.payfast.co.za/docs#step_4_confirm_payment
  */
 class PayfastWebhookHandler extends Payfast
 {
