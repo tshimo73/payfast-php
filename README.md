@@ -545,9 +545,9 @@ get_payment_url(): string
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/your-feature`)
-3. Commit your changes (`git commit -m 'Add your feature'`)
-4. Push to the branch (`git push origin feature/your-feature`)
+2. Create your feature branch (`git checkout -b feature/your-feature-name`)
+3. Commit your changes (`git commit -m 'your-message (informative)'`)
+4. Push to the branch (`git push origin feature/your-feature-name`)
 5. Open a Pull Request
 
 ---
@@ -559,7 +559,7 @@ MIT License - see LICENSE file for details
 ---
 
 ## Support
-
+-name
 - 📧 Email: tshimologomoeng08@gmail.com
 - 🐛 Issues: [GitHub Issues](https://github.com/tshimo73/payfast-php/issues)
 - 📚 PayFast Docs: [https://developers.payfast.co.za](https://developers.payfast.co.za)
