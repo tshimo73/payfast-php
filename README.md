@@ -15,6 +15,7 @@ Modern PHP package for PayFast payment integration with automatic signature gene
 - ✅ PHP 8.1+ with full type safety
 
 ## Installation
+
 ```bash
 composer require tshimologomoeng/payfast-php
 ```
@@ -42,6 +43,7 @@ composer require tshimologomoeng/payfast-php
 ## Simple Payment Integration
 
 Redirect users to PayFast's payment page.
+
 ```php
 <?php
 
@@ -93,6 +95,7 @@ Embed PayFast's payment form directly on your checkout page.
 **Important:** Requires HTTPS for security.
 
 ### PHP Setup
+
 ```php
 <?php
 
@@ -140,6 +143,7 @@ For complete JavaScript implementation, see [PayFast Onsite Documentation](https
 Set up automatic recurring payments.
 
 **Important:** Passphrase is **required** for subscriptions.
+
 ```php
 <?php
 
@@ -185,6 +189,7 @@ header("Location: $url");
 ### Free Trial
 
 Set initial amount to R0.00 for a free trial period:
+
 ```php
 $subscription->set_transaction_details(
     amount: 0.00, // Free trial
@@ -197,6 +202,7 @@ $subscription->set_transaction_details(
 ## Tokenization
 
 Save customer payment details for future ad-hoc charges.
+
 ```php
 <?php
 
@@ -226,6 +232,7 @@ header("Location: $url");
 ### Update Card Details
 
 Generate a link for customers to update their saved card:
+
 ```php
 $updateLink = $tokenization->update_card_details_link(
     token: 'customer-token-from-webhook',
@@ -242,6 +249,7 @@ echo "<a href='$updateLink'>Update Card Details</a>";
 Instantly split payments with a third party merchant.
 
 **Note:** Must be enabled on your PayFast account.
+
 ```php
 <?php
 
@@ -256,23 +264,23 @@ try {
         min: 5.00, // Minimum R5
         max: 200.00 // Maximum R200
     );
-    
+
     // OR split by fixed amount
     $split = new PayfastSplitPayments(
         third_party_merchant_id: '10000200',
         amount: 50.00 // R50 goes to third party
     );
-    
+
     // OR combine both (percentage first, then amount)
     $split = new PayfastSplitPayments(
         third_party_merchant_id: '10000200',
         percentage: 10,
         amount: 5.00
     );
-    
+
     // Get JSON data to send with payment
     $splitData = $split->setup();
-    
+
 } catch (PayfastValidationException $e) {
     echo $e->getMessage();
     print_r($e->getErrors());
@@ -291,6 +299,7 @@ try {
 ## Webhook Handler
 
 ### Simple Payment Webhook
+
 ```php
 <?php
 
@@ -302,39 +311,30 @@ use TshimologoMoeng\Payfast\WebhookHandler\PayfastWebhookHandler;
 $webhook = new PayfastWebhookHandler(
     merchant_id: 'your_merchant_id',
     merchant_key: 'your_merchant_key',
-    testing_mode: true,
+    testing_mode: true, // Optional - True by default
     passphrase: 'your_passphrase' // Optional
 );
 
 // Handle the webhook with expected amount
-if ($webhook->handle_webhook(expected_amount: 100.00)) {
-    
-    // Check if payment was successful
-    if ($webhook->is_payment_complete()) {
-        // Payment successful - update your database
-        $data = $webhook->get_data();
-        
-        $paymentId = $data['m_payment_id']; // Your order ID
-        $payfastId = $data['pf_payment_id']; // PayFast transaction ID
-        $amount = $data['amount_gross'];
-        
-        // Update order status in your database
-        // ...
-        
-        echo "Payment processed successfully";
+if ($_SERVER['REQUEST_METHOD'] === "POST") {
+
+    if ($webhook->handle_webhook(expected_amount: 100.00)) {
+        if ($webhook->is_payment_complete()) {
+            // Logic if the payment went through
+        } else {
+            // Logic if payment failed / cancelled
+        }
     } else {
-        // Payment failed or pending
-        $status = $webhook->get_payment_status();
-        echo "Payment status: $status";
+            // Logic for invalid webhook (Validation failed)
     }
 } else {
-    // Validation failed
-    http_response_code(400);
-    echo "Invalid webhook";
+    // if request is not a post request
 }
+
 ```
 
 ### Subscription Webhook
+
 ```php
 <?php
 
@@ -349,11 +349,11 @@ $webhook = new PayfastSubscriptionWebhookHandler(
 
 if ($webhook->handle_webhook(expected_amount: 99.99)) {
     $data = $webhook->get_data();
-    
+
     $token = $data['token']; // Use for API calls
     $type = $data['type']; // subscription.free-trial, subscription.payment, etc.
     $nextRun = $data['next_run']; // Next billing date
-    
+
     // Process subscription payment
     // ...
 }
@@ -362,6 +362,7 @@ if ($webhook->handle_webhook(expected_amount: 99.99)) {
 ### Webhook Security
 
 The webhook handler performs these security checks:
+
 1. ✅ **Signature verification** - Ensures data wasn't tampered with
 2. ✅ **IP validation** - Confirms request is from PayFast servers
 3. ✅ **Amount validation** - Verifies payment amount matches expected
@@ -372,6 +373,7 @@ The webhook handler performs these security checks:
 ## Available Payment Methods
 
 You can force a specific payment method using the `PaymentMethod` enum:
+
 ```php
 use TshimologoMoeng\Payfast\Enums\PaymentMethod;
 
@@ -383,6 +385,7 @@ $payfast->set_transaction_details(
 ```
 
 Available options:
+
 - `PaymentMethod::EFT` - Electronic Funds Transfer
 - `PaymentMethod::Credit_Card` - Credit Card
 - `PaymentMethod::Debit_Card` - Debit Card
@@ -404,20 +407,23 @@ Available options:
 ## Testing
 
 ### Running Tests
+
 ```bash
 vendor/bin/phpunit
 ```
 
 Or add to `composer.json`:
+
 ```json
 {
-    "scripts": {
-        "test": "phpunit"
-    }
+  "scripts": {
+    "test": "phpunit"
+  }
 }
 ```
 
 Then run:
+
 ```bash
 composer test
 ```
@@ -425,6 +431,7 @@ composer test
 ### PayFast Sandbox Credentials
 
 For testing, use PayFast's sandbox credentials:
+
 - Merchant ID: `10000100`
 - Merchant Key: `46f0cd694581a`
 - Sandbox URL: `https://sandbox.payfast.co.za`
@@ -432,6 +439,7 @@ For testing, use PayFast's sandbox credentials:
 ### Test Card Details
 
 Use these test cards in sandbox mode:
+
 - **Successful payment**: 4000 0000 0000 0002
 - **Failed payment**: 4000 0000 0000 0010
 
@@ -440,6 +448,7 @@ Use these test cards in sandbox mode:
 ## Configuration
 
 ### Sandbox vs Production
+
 ```php
 // Sandbox (testing)
 $payfast = new PayfastSimpleIntegration(
@@ -459,6 +468,7 @@ $payfast = new PayfastSimpleIntegration(
 ### Using Passphrase (Recommended)
 
 For added security, set a passphrase in your PayFast dashboard and include it:
+
 ```php
 $payfast = new PayfastSimpleIntegration(
     merchant_id: 'your_merchant_id',
@@ -473,6 +483,7 @@ $payfast = new PayfastSimpleIntegration(
 ---
 
 ## Error Handling
+
 ```php
 use TshimologoMoeng\Payfast\Exceptions\PayfastValidationException;
 
@@ -495,6 +506,7 @@ try {
 ### PayfastSimpleIntegration
 
 #### Constructor
+
 ```php
 __construct(
     string $merchant_id,
@@ -511,6 +523,7 @@ __construct(
 #### Methods
 
 **set_customer_details()**
+
 ```php
 set_customer_details(
     ?string $name_first = null,
@@ -521,6 +534,7 @@ set_customer_details(
 ```
 
 **set_transaction_details()**
+
 ```php
 set_transaction_details(
     float $amount,
@@ -534,6 +548,7 @@ set_transaction_details(
 ```
 
 **get_payment_url()**
+
 ```php
 get_payment_url(): string
 ```
@@ -559,7 +574,9 @@ MIT License - see LICENSE file for details
 ---
 
 ## Support
+
 -name
+
 - 📧 Email: tshimologomoeng08@gmail.com
 - 🐛 Issues: [GitHub Issues](https://github.com/tshimo73/payfast-php/issues)
 - 📚 PayFast Docs: [https://developers.payfast.co.za](https://developers.payfast.co.za)
@@ -569,6 +586,7 @@ MIT License - see LICENSE file for details
 ## Changelog
 
 ### 2.0.0 (Current)
+
 - ✨ Added onsite payments
 - ✨ Added recurring billing/subscriptions
 - ✨ Added tokenization
@@ -578,11 +596,13 @@ MIT License - see LICENSE file for details
 - 📝 Improved documentation
 
 ### 1.0.2
+
 - Fixed autoload issues
 - Improved documentation
 - Added webhook validation
 
 ### 1.0.0
+
 - Initial release
 - Simple payment integration
 - Webhook handler
