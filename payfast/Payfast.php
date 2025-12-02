@@ -91,14 +91,25 @@ abstract class Payfast
     public function set_transaction_details(
         float $amount,
         string $item_name,
+
+        string $return_url,
+        string $cancel_url,
+        string $notify_url,
+
         ?string $item_description = null,
         ?string $m_payment_id = null,
         ?bool $email_confirmation = true,
         ?string $confirmation_address = null,
         ?PaymentMethod $payment_method = null
+
     ): void {
         $this->amount = $amount;
         $this->item_name = $item_name;
+
+        $this->return_url = $return_url;
+        $this->cancel_url = $cancel_url;
+        $this->notify_url = $notify_url;
+
         $this->item_description = $item_description;
         $this->m_payment_id = $m_payment_id;
         $this->email_confirmation = $email_confirmation;

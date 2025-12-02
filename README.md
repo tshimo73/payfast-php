@@ -58,9 +58,6 @@ $payfast = new PayfastSimpleIntegration(
     merchant_key: 'your_merchant_key',
     testing_mode: true, // Set to false for production
     passphrase: 'your_passphrase', // Optional
-    return_url: 'https://yoursite.com/success',
-    cancel_url: 'https://yoursite.com/cancel',
-    notify_url: 'https://yoursite.com/webhook'
 );
 
 // Set customer details (optional)
@@ -68,16 +65,19 @@ $payfast->set_customer_details(
     name_first: 'John',
     name_last: 'Doe',
     email_address: 'john@example.com',
-    cell_number: '0821234567'
+    cell_number: '0821234567' // Optional
 );
 
 // Set transaction details
 $payfast->set_transaction_details(
     amount: 100.00,
     item_name: 'Product Name',
+    return_url: 'yourdomain.co.za/../success',
+    cancel_url: 'yourdomain.co.za/../cancel',
+    notify_url: 'yourdomain.co.za/../notify',
     item_description: 'Product description',
     m_payment_id: 'ORDER-123', // Your unique order ID
-    payment_method: PaymentMethod::Credit_Card // Optional: force specific payment method
+    payment_method: PaymentMethod::Credit_Card// Optional: force specific payment method
 );
 
 // Redirect user to PayFast
@@ -86,7 +86,18 @@ header("Location: $paymentUrl");
 exit;
 ```
 
----
+or you can send the data to your frontend and directed them from there.
+
+```javascript
+//example with javascript and axios
+function getPaymentUrl(formdata){
+    const { data } = await axios.post('{api.yourdomain.co.za}/payment', formData);
+
+    const { paymentUrl } = data
+
+    window.location.href = paymentUrl;
+}
+```
 
 ## Onsite Payments
 
